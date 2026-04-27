@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 
 function RawMaterialList() {
   const [materials, setMaterials] = useState([]);
   const [form, setForm] = useState({ name: '', unit: 'kg', reorderLevel: '', stock: '' });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchData = () => axios.get('/api/raw-materials').then(res => setMaterials(res.data));
+  const fetchData = () => API.get('/api/raw-materials').then(res => setMaterials(res.data));
   useEffect(() => { fetchData(); }, []);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,9 +20,9 @@ function RawMaterialList() {
     const payload = { ...form, reorderLevel: Number(form.reorderLevel), stock: Number(form.stock) };
     try {
       if (editingId) {
-        await axios.put(`/api/raw-materials/${editingId}`, payload);
+        await API.put(`/api/raw-materials/${editingId}`, payload);
       } else {
-        await axios.post('/api/raw-materials', payload);
+        await API.post('/api/raw-materials', payload);
       }
       fetchData();
       resetForm();
@@ -38,7 +38,7 @@ function RawMaterialList() {
 
   const handleDelete = async id => {
     if (window.confirm('Delete this material?')) {
-      await axios.delete(`/api/raw-materials/${id}`);
+      await API.delete(`/api/raw-materials/${id}`);
       fetchData();
     }
   };

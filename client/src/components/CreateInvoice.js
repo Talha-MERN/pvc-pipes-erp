@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { useNavigate } from 'react-router-dom';
 
 function CreateInvoice() {
@@ -10,8 +10,8 @@ function CreateInvoice() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/api/parties?type=customer').then(res => setParties(res.data));
-    axios.get('/api/products').then(res => setProducts(res.data));
+    API.get('/api/parties?type=customer').then(res => setParties(res.data));
+    API.get('/api/products').then(res => setProducts(res.data));
   }, []);
 
   const addItem = () => setItems([...items, { product: '', quantity: 1 }]);
@@ -24,7 +24,7 @@ function CreateInvoice() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/invoices', { customer: selectedCustomer, items });
+      await API.post('/api/invoices', { customer: selectedCustomer, items });
       alert('Invoice created!');
       navigate('/invoices');
     } catch (err) {

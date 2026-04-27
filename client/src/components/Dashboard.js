@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const [summary, setSummary] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/stock/summary').then(res => setSummary(res.data)).catch(console.error);
+    API.get('/api/stock/summary').then(res => setSummary(res.data)).catch(console.error);
   }, []);
 
   if (!summary) return <div>Loading dashboard...</div>;

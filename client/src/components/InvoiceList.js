@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { Link } from 'react-router-dom';
 
 function InvoiceList() {
   const [invoices, setInvoices] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/invoices').then(res => setInvoices(res.data)).catch(console.error);
+    API.get('/api/invoices').then(res => setInvoices(res.data)).catch(console.error);
   }, []);
 
   if (!invoices.length) return <div>No invoices yet. <Link to="/invoices/new">Create one</Link></div>;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState({ sku: '', name: '', size: '', length: '', unit: 'piece', sellingPrice: '', reorderLevel: '', stock: '' });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchProducts = () => axios.get('/api/products').then(res => setProducts(res.data));
+  const fetchProducts = () => API.get('/api/products').then(res => setProducts(res.data));
 
   useEffect(() => { fetchProducts(); }, []);
 
@@ -22,9 +22,9 @@ function ProductList() {
     const payload = { ...form, length: Number(form.length), sellingPrice: Number(form.sellingPrice), reorderLevel: Number(form.reorderLevel), stock: Number(form.stock) };
     try {
       if (editingId) {
-        await axios.put(`/api/products/${editingId}`, payload);
+        await API.put(`/api/products/${editingId}`, payload);
       } else {
-        await axios.post('/api/products', payload);
+        await API.post('/api/products', payload);
       }
       fetchProducts();
       resetForm();
@@ -49,7 +49,7 @@ function ProductList() {
 
   const handleDelete = async id => {
     if (window.confirm('Delete this product?')) {
-      await axios.delete(`/api/products/${id}`);
+      await API.delete(`/api/products/${id}`);
       fetchProducts();
     }
   };

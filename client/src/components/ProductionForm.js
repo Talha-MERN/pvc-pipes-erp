@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { useNavigate } from 'react-router-dom';
 
 function ProductionForm() {
@@ -10,8 +10,8 @@ function ProductionForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/api/raw-materials').then(res => setRawMaterials(res.data));
-    axios.get('/api/products').then(res => setProducts(res.data));
+    API.get('/api/raw-materials').then(res => setRawMaterials(res.data));
+    API.get('/api/products').then(res => setProducts(res.data));
   }, []);
 
   const addRM = () => setSelectedRMs([...selectedRMs, { material: '', quantity: 1 }]);
@@ -35,7 +35,7 @@ function ProductionForm() {
         rawMaterials: selectedRMs.map(rm => ({ material: rm.material, quantity: Number(rm.quantity) })),
         products: selectedProducts.map(p => ({ product: p.product, quantity: Number(p.quantity) }))
       };
-      await axios.post('/api/production', payload);
+      await API.post('/api/production', payload);
       alert('Production recorded successfully');
       navigate('/');
     } catch (err) {

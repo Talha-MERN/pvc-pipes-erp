@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 
 function Ledger() {
   const [parties, setParties] = useState([]);
@@ -11,9 +11,9 @@ function Ledger() {
 
   useEffect(() => {
     if (selectedParty) {
-      axios.get(`/api/transactions?party=${selectedParty}`).then(r => {
+      API.get(`/api/transactions?party=${selectedParty}`).then(r => {
         setTransactions(r.data);
-        axios.get(`/api/parties/${selectedParty}`).then(r2 => setBalance(r2.data.balance));
+        API.get(`/api/parties/${selectedParty}`).then(r2 => setBalance(r2.data.balance));
       });
     }
   }, [selectedParty]);

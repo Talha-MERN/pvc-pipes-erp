@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 
 function PartyList() {
   const [parties, setParties] = useState([]);
@@ -9,7 +9,7 @@ function PartyList() {
 
   const fetchParties = async () => {
     const query = filterType ? `?type=${filterType}` : '';
-    const res = await axios.get(`/api/parties${query}`);
+    const res = await API.get(`/api/parties${query}`);
     setParties(res.data);
   };
 
@@ -26,9 +26,9 @@ function PartyList() {
     const payload = { ...form, balance: Number(form.balance) };
     try {
       if (editingId) {
-        await axios.put(`/api/parties/${editingId}`, payload);
+        await API.put(`/api/parties/${editingId}`, payload);
       } else {
-        await axios.post('/api/parties', payload);
+        await API.post('/api/parties', payload);
       }
       fetchParties();
       resetForm();
@@ -44,7 +44,7 @@ function PartyList() {
 
   const handleDelete = async id => {
     if (window.confirm('Delete this party?')) {
-      await axios.delete(`/api/parties/${id}`);
+      await API.delete(`/api/parties/${id}`);
       fetchParties();
     }
   };

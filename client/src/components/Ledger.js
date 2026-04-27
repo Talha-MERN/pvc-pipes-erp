@@ -7,7 +7,7 @@ function Ledger() {
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
 
-  useEffect(() => { axios.get('/api/parties?type=customer').then(r => setParties(r.data)); }, []);
+  useEffect(() => { API.get('/api/parties?type=customer').then(r => setParties(r.data)); }, []);
 
   useEffect(() => {
     if (selectedParty) {

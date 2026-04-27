@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 
 function PartyList() {
   const [parties, setParties] = useState([]);
-  const [filterType, setFilterType] = useState(''); // '' = all, 'customer', 'supplier'
+  const [filterType, setFilterType] = useState('');
   const [form, setForm] = useState({ name: '', type: 'customer', contact: '', balance: 0 });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchParties = async () => {
+  const fetchParties = useCallback(async () => {
     const query = filterType ? `?type=${filterType}` : '';
     const res = await API.get(`/api/parties${query}`);
     setParties(res.data);
-  };
+  }, [filterType]);
 
-  useEffect(() => { fetchParties(); }, [filterType]);
+  useEffect(() => {
+    fetchParties();
+  }, [fetchParties]);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
   const resetForm = () => {
@@ -53,7 +55,7 @@ function PartyList() {
     <div>
       <h2>Parties (Customers & Suppliers)</h2>
       <div>
-        Filter: 
+        Filter:
         <select value={filterType} onChange={e => setFilterType(e.target.value)}>
           <option value="">All</option>
           <option value="customer">Customers</option>

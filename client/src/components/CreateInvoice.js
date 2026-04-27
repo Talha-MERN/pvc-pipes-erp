@@ -56,4 +56,5 @@ function CreateInvoice() {
     </div>
   );
 }
+
 export default CreateInvoice;

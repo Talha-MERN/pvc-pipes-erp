@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 
 function ProductList() {
   const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({ sku: '', name: '', size: '', length: '', unit: 'piece', sellingPrice: '', reorderLevel: '', stock: '' });
+  const [form, setForm] = useState({
+    sku: '', name: '', size: '', length: '', unit: 'piece',
+    sellingPrice: '', reorderLevel: '', stock: ''
+  });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchProducts = () => API.get('/api/products').then(res => setProducts(res.data));
+  const fetchProducts = useCallback(() => {
+    API.get('/api/products').then(res => setProducts(res.data));
+  }, []);
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -19,7 +24,13 @@ function ProductList() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const payload = { ...form, length: Number(form.length), sellingPrice: Number(form.sellingPrice), reorderLevel: Number(form.reorderLevel), stock: Number(form.stock) };
+    const payload = {
+      ...form,
+      length: Number(form.length),
+      sellingPrice: Number(form.sellingPrice),
+      reorderLevel: Number(form.reorderLevel),
+      stock: Number(form.stock)
+    };
     try {
       if (editingId) {
         await API.put(`/api/products/${editingId}`, payload);

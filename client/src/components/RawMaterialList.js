@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 
 function RawMaterialList() {
@@ -6,8 +6,11 @@ function RawMaterialList() {
   const [form, setForm] = useState({ name: '', unit: 'kg', reorderLevel: '', stock: '' });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchData = () => API.get('/api/raw-materials').then(res => setMaterials(res.data));
-  useEffect(() => { fetchData(); }, []);
+  const fetchData = useCallback(() => {
+    API.get('/api/raw-materials').then(res => setMaterials(res.data));
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
   const resetForm = () => {
